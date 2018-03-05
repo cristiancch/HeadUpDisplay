@@ -24,41 +24,41 @@ export default class Location extends React.Component {
     watchID: ?number = null;
 
     componentDidMount() {
-         this.interval = setInterval(() => {
-        navigator.geolocation.getCurrentPosition(position => {
-            let lat = parseFloat(position.coords.latitude);
-            let long = parseFloat(position.coords.longitude);
-            let initialRegion = {
-                latitude: lat,
-                longitude: long,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA
-            };
-            this.setState({
-                region: initialRegion,
-                currentSpeed: position.coords.speed < 0 ? 0 : position.coords.speed
+        this.interval = setInterval(() => {
+            navigator.geolocation.getCurrentPosition(position => {
+                let lat = parseFloat(position.coords.latitude);
+                let long = parseFloat(position.coords.longitude);
+                let initialRegion = {
+                    latitude: lat,
+                    longitude: long,
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA
+                };
+                this.setState({
+                    region: initialRegion,
+                    currentSpeed: position.coords.speed < 0 ? 0 : position.coords.speed
+                });
+            }, {
+                enableHighAccuracy: true, timeout: 20000, maximumAge: 10000,
             });
-        }, {
-            enableHighAccuracy: true, timeout: 20000, maximumAge: 10000,
-        });
-        this.watchID = navigator.geolocation.watchPosition((position) => {
-            let lat = parseFloat(position.coords.latitude);
-            let long = parseFloat(position.coords.longitude);
+            this.watchID = navigator.geolocation.watchPosition((position) => {
+                let lat = parseFloat(position.coords.latitude);
+                let long = parseFloat(position.coords.longitude);
 
-            let lastRegion = {
-                latitude: lat,
-                longitude: long,
-                longitudeDelta: LONGITUDE_DELTA,
-                latitudeDelta: LATITUDE_DELTA,
-            };
+                let lastRegion = {
+                    latitude: lat,
+                    longitude: long,
+                    longitudeDelta: LONGITUDE_DELTA,
+                    latitudeDelta: LATITUDE_DELTA,
+                };
 
-            this.setState({
-                region: lastRegion,
-                currentSpeed: position.coords.speed < 0 ? 0 : position.coords.speed
-                // .toFixed(2)
+                this.setState({
+                    region: lastRegion,
+                    currentSpeed: position.coords.speed < 0 ? 0 : position.coords.speed
+                    // .toFixed(2)
+                });
             });
-        });
-          }, 1000);
+        }, 1000);
     }
 
     componentWillUnmount() {
